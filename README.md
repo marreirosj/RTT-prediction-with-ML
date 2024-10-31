@@ -4,8 +4,7 @@
 
 Developed to predict Remaining Time to Travel (RTT) and, based on it, Estimated Time of Arrival (ETA) for ships to a maritime port, using AIS receiver data from the port (short-distance prediction).
 
-
-![Pipeline] (./Extras/pipeline.png)
+![Pipeline](/Extras/pipeline.png)
 
 
 ## Requirements
@@ -20,48 +19,62 @@ Developed to predict Remaining Time to Travel (RTT) and, based on it, Estimated 
 * <a href= "https://pypi.org/project/Cartopy/"> Cartopy </a>
 * <a href= "https://docs.python.org/3/library/math.html"> Math </a>
 
-## Premises
-* At least one '.txt' zipped file from AIS receiver
-* If the files are unzipped and in '.csv' format script 'unzip_to_csv' not needed
-* Original data (used in this work) is not available due to confidentiality issues
-* After loading and first cleaning, appearence should have the follpwing features:
-![Pipeline] (./Extras/head1.png)
 
-## Installation
-```bash
-# Download the project
-wget
+## Premises
+* At least one '.txt' zipped file from AIS receiver.
+* If the files are unzipped and in '.csv' format script, 'unzip_to_csv' is not needed.
+* Original data (used in this work) is not available due to confidentiality issues, but the first head (zipped data received) had the following features:
+
+![Pipeline](./Extras/head0.png)
+
+* After loading and first cleaning, the appearance should have the following features:
+
+![Pipeline](./Extras/head1.png)
+
+* After features engineering and eliminating features that were unnecessary for ML models:
+
+![Pipeline](./Extras/head2.png)
+
 
 ## Usage
 
-*** 2 scripts:
-* 'unzip_to_csv' will unzip files and put them on csv folders. Because of harware issues, this script was adapted to automatically make some changes on data, as eliminating unnecessary columns (based on literature review) or selecting ships from type 70 (container cargos). It alsio use the chunksize parameter in order to deal with the large ammount of data in each dataset.
-* 'splitted_csv' to split the data into several '.csv' files, each one with one 'ShipVoyage' representing one single voyage of one specific ship (order by MMSI number)
+### Main Folder
+* 'RTT_&_ETA_predict' contains all the loading of data, data handling, EDA, and feature engineering.
+* 'ETA_predict_KNN' contains the ML model using the K-nearest neighbors algorithm.
+* 'ETA_predict_MLP' contains the ML model using the Multilayer Perceptron neural network.
+* 'ETA_predict_KNN' contains the ML model using the Random Forest Regression technique.
+* 'Raw_Data' folder to store your zipped files.
+* 'CSV' folder to store all csv files and folders (output).
+* 'Plots' folder to store all 'ShipVoyages' plots (output).
+* 'KNN', 'MLP', and 'RF' folders to store test and train folders and files (output).
 
-*** '.csv' in use:
-* zipped '.txt' files goes to the 'Raw_Data' folder
-* unzipped '.txt' files goes to the 'Unzipped' folder
-* zipped '.txt' files goes to the 'Raw_Data' folder
-*** Inside 'CSV' folder: 
-* data after first cleaning is compilled in '.csv' nammed 'filtered_dataset'
-* data after complete cleaning is compilled in '.csv' nammed 'cleaned_dataset'
-* data after splitted into 'ShipVoyage' feature is saved in 'voyages_splitted' folder
-* data after voyage selection is divided between 'voyage_reached' and 'voyages_out' folders
-* data from outliers is saved in 'voyage_outliers' folder
-* final data after handling is saved in 'voyages_final' folder
-* correlation matrix is saved
+### Folder Scripts
+* 'unzip_to_csv' will unzip files from 'Raw_Data' folder to one merged csv file named 'merged_dataset.csv'. Because of hardware issues, this script was adapted to automatically make some changes to data, such as eliminating unnecessary columns (based on a literature review) or selecting ships from type 70 (container cargos). It also uses the chunksize parameter to deal with the large amount of data in each dataset.
+* 'splitted_csv' to split the data into several '.csv' files, each with one 'ShipVoyage' representing one single voyage of one specific ship (order by MMSI number).
 
-*** Inside 'Plots' folder:
-* 'finished_voyages' folder contains plots of all finished voyages (reached the port)
-* inside 'finished_voyages' a folder named 'eliminated' contains finished voyages that were eliminated for some reason
-* 'unfinished_voyages' folder contains plots of all unfinished voyages (didn't reached the port)
-* 'Outliers' contains plots of outliers voyage that were removed
 
-*** 4 codes
-* 'RTT_&_ETA_predict' contains all the loading of data, data handling, EDA and feature engineering
-* 'ETA_predict_KNN' contains ML model using K-nearest neighbors algorithm
-* 'ETA_predict_MLP' contains ML model using Multilayer Perceptron neural network
-* 'ETA_predict_KNN' contains ML model using Random Forest Regression technique
+## Outputs
+
+### 'CSV' folder: 
+* 'merged_dataset.csv' file - data after unzipping and converting it into one csv file.
+* 'filtered_dataset' file - data after first cleaning.
+* 'cleaned_dataset' file - data after complete cleaning.
+* 'voyages_splitted' folder - data after splitting into 'ShipVoyage' feature. 
+* 'voyage_reached' folder - data of voyages that have reached the port
+* 'voyages_out' folder - data of voyages that haven't reached the port
+* 'voyage_outliers' folder - data of removed outliers. 
+* 'voyages_final' - final data after handled.
+* correlation matrix.
+
+### 'Plots' folder:
+* 'finished_voyages' folder - plots of all finished voyages (reached the port). Inside this folder, another one named 'eliminated' contains finished voyages that were eliminated later for some reason.
+* 'unfinished_voyages' folder - plots of all unfinished voyages (didn't reach the port).
+* 'Outliers' - plots of outlier voyages that were removed
+
+### 'HTML' folder
+* 'Sines_map.html' - HTML map of port of Sines with defined radius (7km and 50km), and first and last register of each finished 'ShipVoyage'.
+* 'excluded_voyages_map.html' - HTML map of port of Sines with defined radius (7km and 50km), and first and last register of each unfinished or excluded 'ShipVoyage'.
+
 
 ## Credits
 <p> <a href= "https://github.com/marreirosj"> João Marreiros </a> </p>
